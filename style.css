@@ -1,0 +1,147 @@
+/* 
+==============
+Variables
+============== 
+*/
+
+:root {
+    /* background colors */
+    --clr-bg-1: #6c8888;
+    --clr-bg-2: #3f4e4e;
+    /* text colors */
+    --clr-text: white;
+    /* components colors */
+    --clr-bread: #d3ad82;
+    --clr-ham: #8b3300;
+    --clr-cheese: #ffd932;
+    --clr-lettuce: #31ad00;
+    --clr-tomato: #c50000;
+    --clr-onion: #86004a;
+    --clr-fish: #fffffa;
+    
+    --ff-font: "Montserrat";
+}
+
+/* 
+==============
+Global styles
+============== 
+*/
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+}
+
+body {
+    font-family: var(--ff-font);
+    font-size: 12pt;
+    letter-spacing: 0.5px;
+    line-height: 120%;  
+    background-color: var(--clr-bg-1);
+    color: var(--clr-text);
+}
+
+.container {
+    width: 800px;
+    height: 96%;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    height: 15%;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.order {
+    display: flex;
+    height: 18%;
+    flex-direction: row;
+    margin-bottom: 2%;
+}
+
+.burger, .player, .components {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    width: 28%;
+    padding: 20px;
+    background-color: var(--clr-bg-2);
+    border-right: 3px solid white;
+    gap: 6%;
+}
+
+.burger {
+    border-radius: 30px 0 0 30px;
+}
+
+.components {
+    width: 44%;
+    flex-wrap: wrap;
+    align-content: space-evenly;
+    border: none;
+    border-radius: 0 30px 30px 0;
+}
+
+.bread-top, .ham, .cheese, .lettuce, 
+.tomato, .onion, .fish, .bread-bottom {
+    width: 90px;
+    height: 17%;
+    border-radius: 8px;
+}
+
+.bread-top {
+    height: 30%;
+    border-radius: 30px 30px 3px 3px;
+    background-color: var(--clr-bread);
+}
+
+.bread-bottom {
+    border-radius: 3px 3px 8px 8px;
+    background-color: var(--clr-bread);
+}
+
+.ham {
+    background-color: var(--clr-ham);
+}
+
+.cheese {
+    background-color: var(--clr-cheese);
+}
+
+.lettuce {
+    background-color: var(--clr-lettuce);
+}
+
+.tomato {
+    background-color: var(--clr-tomato);
+}
+
+.onion {
+    background-color: var(--clr-onion);
+}
+
+.fish {
+    background-color: var(--clr-fish);
+}
+
+.footer {
+    display: flex;
+    height: 4%;
+    width: 800px;
+    justify-content: flex-end;
+    align-items: center;
+    margin: auto;
+}
+    
