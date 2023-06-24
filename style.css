@@ -46,9 +46,18 @@ body {
     color: var(--clr-text);
 }
 
+a {
+    text-decoration: none;
+    color: var(--clr-cheese);
+}
+a:hover {
+    transition: 1s;
+    color: white;
+}
+
 .container {
-    width: 800px;
-    height: 96%;
+    width: 700px;
+    height: 91%;
     display: flex;
     margin: auto;
     flex-direction: column;
@@ -65,9 +74,10 @@ body {
 
 .order {
     display: flex;
-    height: 18%;
+    height: 19%;
     flex-direction: row;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
+    transition: transform 0.5s;
 }
 
 .burger, .player, .components {
@@ -136,12 +146,44 @@ body {
     background-color: var(--clr-fish);
 }
 
+.score {
+    display: flex;
+    background-color: var(--clr-bg-2);
+    border-radius: 10px;
+    margin: 0 4px 0 0;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 50px;
+    font-size: 36pt;
+}
+
+#progressBar {
+    display: flex;
+    width: 700px;
+    height: 3%;
+    margin: auto;
+    background-color: #ddd;
+    border-radius: 15px;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+    background-color: var(--clr-cheese);
+    border-radius: 15px;
+}
+
 .footer {
     display: flex;
     height: 4%;
-    width: 800px;
+    width: 700px;
     justify-content: flex-end;
     align-items: center;
-    margin: auto;
+    margin: 0.5% auto;
+}
+
+.removed {
+    transform: scale(0.1);
 }
     

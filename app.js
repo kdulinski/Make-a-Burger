@@ -1,72 +1,73 @@
+// Simple game for learning DOM. The goal is to do burger like on the left side by clicking components from the right.
+
+// The ending of the game is still not proper.
+
 const components = ["ham", "cheese", "lettuce", "tomato", "onion", "fish"];
 
-let orders = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
-let player = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
-let orderNumber = 0;
-let time = 0;
+let interval = 5000;
 let score = 0;
+let scorePaded = "0000";
 let ordersNum = 0;
+let progressBar = document.getElementById("progress");
 
+//start game with setInterval
+newOrder();
+let gameStart = setInterval(newOrder, interval);
+
+interval == 5000;
+
+// function - simple random number
 function getRandom(n) {
   return Math.floor(Math.random() * n);
 }
 
-function newOrder() {
-  orders[orderNumber][0] = "bread-top";
-  orders[orderNumber][3] = "bread-bottom";
-  ordersNum++;
+// function - adding 0 on the left for the score
+function pad(num, size) {
+  num = num.toString();
+  while (num.length < size) num = "0" + num;
+  return num;
+}
 
-  for (let n = 1; n < 3; n++) {
-    orders[orderNumber][n] = components[getRandom(components.length)];
-  }
+function updateScore() {
+  scorePaded = pad(score, 4);
+  document.getElementById("score0").innerHTML = scorePaded[0];
+  document.getElementById("score1").innerHTML = scorePaded[1];
+  document.getElementById("score2").innerHTML = scorePaded[2];
+  document.getElementById("score3").innerHTML = scorePaded[3];
+}
+
+function newOrder() {
+  ordersNum++;
 
   let newOrderDiv = document.createElement("div");
   newOrderDiv.className = "order";
   newOrderDiv.innerHTML = `
   <div class="burger">
-    <div class="${orders[orderNumber][0]}"></div>
-    <div class="${orders[orderNumber][1]}"></div>
-    <div class="${orders[orderNumber][2]}"></div>
-    <div class="${orders[orderNumber][3]}"></div>
+  <div class="bread-top"></div>
+  <div class="${components[getRandom(components.length)]}"></div>
+  <div class="${components[getRandom(components.length)]}"></div>
+  <div class="bread-bottom"></div>
   </div>
   <div class="player"></div>
   <div class="components">
-    <div class="component bread-top"></div>
-    <div class="component ham"></div>
-    <div class="component cheese"></div>
-    <div class="component lettuce"></div>
-    <div class="component tomato"></div>
-    <div class="component onion"></div>
-    <div class="component fish"></div>
-    <div class="component bread-bottom"></div>
+  <div class="component bread-top"></div>
+  <div class="component ham"></div>
+  <div class="component cheese"></div>
+  <div class="component lettuce"></div>
+  <div class="component tomato"></div>
+  <div class="component onion"></div>
+  <div class="component fish"></div>
+  <div class="component bread-bottom"></div>
   </div>`;
 
-  ordersNum++;
+  if (ordersNum == 4) {
+    progressBar.style.backgroundColor = "var(--clr-tomato)";
+    clearInterval(gameStart);
+  }
 
   let container = document.getElementById("container");
   container.appendChild(newOrderDiv);
-}
-
-//Add orders
-
-// if (console.log(container.children[0]) == undefined) {
-// }
-
-while (ordersNum < 4) {
-  setTimeout(() => {
-    newOrder();
-  }, time);
-  time += 2000;
+  barMove();
 }
 
 //Making a burger - click event on components
@@ -83,14 +84,47 @@ document.addEventListener("click", (e) => {
 
     //Removing made burger
     if (selectedOrder.children[1].children[3] != null) {
-      selectedOrder.remove();
+      selectedOrder.classList.add("removed");
+
+      selectedOrder.addEventListener("transitionend", () => {
+        selectedOrder.remove();
+      });
       ordersNum--;
 
       //Add points - it's not working because difrent classes of childrens
-      if (selectedOrder.children[0] == selectedOrder.children[1]) {
-        score += 10;
-        document.getElementById("score").innerHTML = score;
+      if (
+        selectedOrder.children[0].children[0].className ==
+          selectedOrder.children[1].children[0].className &&
+        selectedOrder.children[0].children[1].className ==
+          selectedOrder.children[1].children[1].className &&
+        selectedOrder.children[0].children[2].className ==
+          selectedOrder.children[1].children[2].className &&
+        selectedOrder.children[0].children[3].className ==
+          selectedOrder.children[1].children[3].className
+      ) {
+        score++;
+        updateScore();
+      } else if (score == 0) {
+        score = 0;
+        updateScore();
+      } else {
+        score--;
+        updateScore();
       }
     }
   }
 });
+
+// Progress bar move function
+function barMove() {
+  let width = 0;
+  let id = setInterval(frame, interval / 100);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++;
+      progressBar.style.width = width + "%";
+    }
+  }
+}
