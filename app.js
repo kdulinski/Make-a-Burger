@@ -1,7 +1,5 @@
 // Simple game for learning DOM. The goal is to do burger like on the left side by clicking components from the right.
 
-// The ending of the game is still not proper.
-
 const components = ["ham", "cheese", "lettuce", "tomato", "onion", "fish"];
 
 let interval = 5000;
@@ -10,9 +8,7 @@ let scorePaded = "0000";
 let ordersNum = 0;
 let progressBar = document.getElementById("progress");
 
-//start game with setInterval
-newOrder();
-let gameStart = setInterval(newOrder, interval);
+let container = document.getElementById("container");
 
 interval == 5000;
 
@@ -60,12 +56,6 @@ function newOrder() {
   <div class="component bread-bottom"></div>
   </div>`;
 
-  if (ordersNum == 4) {
-    progressBar.style.backgroundColor = "var(--clr-tomato)";
-    clearInterval(gameStart);
-  }
-
-  let container = document.getElementById("container");
   container.appendChild(newOrderDiv);
   barMove();
 }
@@ -90,7 +80,9 @@ document.addEventListener("click", (e) => {
         selectedOrder.remove();
       });
       ordersNum--;
-
+      if (ordersNum == 3) {
+        progressBar.style.backgroundColor = "var(--clr-cheese)";
+      }
       //Add points - it's not working because difrent classes of childrens
       if (
         selectedOrder.children[0].children[0].className ==
@@ -128,3 +120,17 @@ function barMove() {
     }
   }
 }
+
+//start game with setInterval
+newOrder();
+let gameStart = setInterval(function () {
+  if (ordersNum < 3) {
+    newOrder();
+  } else if (ordersNum == 3) {
+    newOrder();
+    progressBar.style.backgroundColor = "var(--clr-tomato)";
+  } else {
+    clearInterval(gameStart);
+    setTimeout(alert("You lose."), interval); // I want make there popup with ten best scores and button "play again".
+  }
+}, interval);
