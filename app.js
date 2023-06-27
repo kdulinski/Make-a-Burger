@@ -2,22 +2,21 @@
 
 const components = ["ham", "cheese", "lettuce", "tomato", "onion", "fish"];
 
-let interval = 5000;
+let interval = 5000; // time beetween orders
 let score = 0;
 let scorePaded = "0000";
-let ordersNum = 0;
-let progressBar = document.getElementById("progress");
+let ordersQuantity = 0; // number of orders in preparation at the moment
+let ordersNumber = 0; // the number of all previous orders
 
+let progressBar = document.getElementById("progress");
 let container = document.getElementById("container");
 
-interval == 5000;
-
-// function - simple random number
+// function - Simple random number
 function getRandom(n) {
   return Math.floor(Math.random() * n);
 }
 
-// function - adding 0 on the left for the score
+// function - Adding 0 on the left for the score
 function pad(num, size) {
   num = num.toString();
   while (num.length < size) num = "0" + num;
@@ -32,8 +31,35 @@ function updateScore() {
   document.getElementById("score3").innerHTML = scorePaded[3];
 }
 
+function intervalReduction() {
+  if (ordersNumber % 5 == 0) {
+    interval -= interval / 20; // it works with barMove function but doesn't work with gameStart function
+
+    let TimeSpeedsUp = document.getElementById("time-speeds-up");
+    TimeSpeedsUp.classList.add("animation-start");
+    setTimeout(() => {
+      TimeSpeedsUp.classList.remove("animation-start");
+    }, 1000);
+  }
+}
+
+// function - progress bar move
+function barMove() {
+  let width = 0;
+  let id = setInterval(frame, interval / 100);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++;
+      progressBar.style.width = width + "%";
+    }
+  }
+}
+
 function newOrder() {
-  ordersNum++;
+  ordersQuantity++;
+  ordersNumber++;
 
   let newOrderDiv = document.createElement("div");
   newOrderDiv.className = "order";
@@ -60,8 +86,7 @@ function newOrder() {
   barMove();
 }
 
-//Making a burger - click event on components
-
+// Making a burger - click event on components
 document.addEventListener("click", (e) => {
   let target = e.target;
   if (target.classList.contains("component")) {
@@ -72,18 +97,18 @@ document.addEventListener("click", (e) => {
 
     selectedOrder.children[1].appendChild(playerComponent);
 
-    //Removing made burger
+    // Deleting an order with 4 children
     if (selectedOrder.children[1].children[3] != null) {
       selectedOrder.classList.add("removed");
 
       selectedOrder.addEventListener("transitionend", () => {
         selectedOrder.remove();
       });
-      ordersNum--;
-      if (ordersNum == 3) {
+      ordersQuantity--;
+      if (ordersQuantity == 3) {
         progressBar.style.backgroundColor = "var(--clr-cheese)";
       }
-      //Add points - it's not working because difrent classes of childrens
+      // Adding points
       if (
         selectedOrder.children[0].children[0].className ==
           selectedOrder.children[1].children[0].className &&
@@ -107,30 +132,22 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Progress bar move function
-function barMove() {
-  let width = 0;
-  let id = setInterval(frame, interval / 100);
-  function frame() {
-    if (width >= 100) {
-      clearInterval(id);
-    } else {
-      width++;
-      progressBar.style.width = width + "%";
-    }
-  }
-}
+newOrder(); // First order without setInterval
 
-//start game with setInterval
-newOrder();
+// Start game with setInterval
 let gameStart = setInterval(function () {
-  if (ordersNum < 3) {
+  if (ordersQuantity < 3) {
     newOrder();
-  } else if (ordersNum == 3) {
+    intervalReduction();
+  } else if (ordersQuantity == 3) {
     newOrder();
+    intervalReduction();
     progressBar.style.backgroundColor = "var(--clr-tomato)";
   } else {
     clearInterval(gameStart);
-    setTimeout(alert("You lose."), interval); // I want make there popup with ten best scores and button "play again".
+    setTimeout(
+      (document.getElementById("modal-game-over").style.display = "flex"),
+      interval
+    );
   }
 }, interval);
